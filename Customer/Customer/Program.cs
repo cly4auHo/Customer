@@ -1,13 +1,31 @@
+using Customer.Config;
+using Customer.DTO;
+using Microsoft.EntityFrameworkCore;
+
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddOpenApi();
+
+builder.Services.AddSingleton<AppDbContextFactory, AppDbContextFactory>();
+builder.Services.AddSingleton<IUserRepo, UserRepo>();
+
+builder.Services.Configure<AppSettings>(builder.Configuration.GetSection("AppSettings"));
+builder.Services.AddSingleton(resolver =>
+    resolver.GetRequiredService<Microsoft.Extensions.Options.IOptions<AppSettings>>().Value);
+
+builder.Services.AddDbContext<AppDbContext>(options =>
+    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+builder.Services.AddControllers();
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
 
+app.UseSwagger();
+app.UseSwaggerUI();
 app.UseHttpsRedirection();
-
-
-
+app.UseAuthorization();
+app.MapControllers();
 
 app.Run();
