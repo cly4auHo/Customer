@@ -35,7 +35,23 @@ public class UserService(IUserRepo userRepo, AppSettings appSettings) : IUserSer
         if (!IsValidEmail(data.Email) || data.Password.Length < appSettings.MinCountForPassword)
             return false;
 
-        return false;
+        try
+        {
+            var model = new UserEntity
+            {
+                Email = data.Email,
+                Password = ComputeSha256(data.Password)
+            };
+            
+            var user = await userRepo.GetUser(model);
+            
+            return user != null;
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            return false;
+        }
     }
     
     private string ComputeSha256(string data)

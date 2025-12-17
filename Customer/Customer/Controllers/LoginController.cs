@@ -40,7 +40,7 @@ public class LoginController(IUserService userService) : ControllerBase
         {
             return Ok(new
             {
-                message = "Email received",
+                message = "Login Successful",
                 data = requestData
             });
         }
