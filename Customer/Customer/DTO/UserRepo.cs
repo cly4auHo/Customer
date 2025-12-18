@@ -1,4 +1,5 @@
 using Customer.Config;
+using Microsoft.EntityFrameworkCore;
 
 namespace Customer.DTO;
 
@@ -24,10 +25,11 @@ public class UserRepo(AppDbContextFactory dbContextFactory) : IUserRepo
         }
     }
 
-    public async Task<UserEntity> GetUser(UserEntity model)
+    public async Task<UserEntity?> GetUser(UserEntity model)
     {
         await using var dbContext = dbContextFactory.CreateDbContext();
         
-        return null;
+        return await dbContext.Users.AsNoTracking()
+            .FirstOrDefaultAsync(user => user.Id == model.Id && user.Password == model.Password);
     }
 }

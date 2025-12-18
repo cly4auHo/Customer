@@ -8,11 +8,11 @@ namespace Customer.Controllers;
 [Route("api/[controller]")]
 public class LoginController(IUserService userService) : ControllerBase
 {
-    [HttpGet]
+    [HttpPost]
     public async Task<IActionResult> Registration([FromBody] UserRequestData requestData)
     {
         if (requestData == null)
-            return BadRequest(new { message = "Email data is required." });
+            return BadRequest(new { message = "Data is required." });
 
         var result = await userService.TryRegistration(requestData);
         
@@ -20,19 +20,19 @@ public class LoginController(IUserService userService) : ControllerBase
         {
             return Ok(new
             {
-                message = "Email received",
+                message = "Registration completed.",
                 data = requestData
             });
         }
 
-        return BadRequest(new { message = "Email is invalid." });
+        return BadRequest(new { message = "Registration failed." });
     }
     
-    [HttpPost]
+    [HttpGet]
     public async Task<IActionResult> Login([FromBody] UserRequestData requestData)
     {
         if (requestData == null)
-            return BadRequest(new { message = "Email data is required." });
+            return BadRequest(new { message = "Data is required." });
 
         var result = await userService.Login(requestData);
         
@@ -40,11 +40,11 @@ public class LoginController(IUserService userService) : ControllerBase
         {
             return Ok(new
             {
-                message = "Login Successful",
+                message = "Login Successful.",
                 data = requestData
             });
         }
 
-        return BadRequest(new { message = "Email is invalid." });
+        return BadRequest(new { message = "login failed." });
     }
 }

@@ -1,10 +1,11 @@
 using Customer.Config;
 using Customer.DTO;
+using Customer.Services;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
-
+builder.Services.AddSingleton<IUserService, UserService>();
 builder.Services.AddSingleton<AppDbContextFactory, AppDbContextFactory>();
 builder.Services.AddSingleton<IUserRepo, UserRepo>();
 
@@ -21,9 +22,11 @@ builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
+//migration
 
 app.UseSwagger();
 app.UseSwaggerUI();
+
 app.UseHttpsRedirection();
 app.UseAuthorization();
 app.MapControllers();
