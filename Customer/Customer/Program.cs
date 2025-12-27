@@ -22,7 +22,11 @@ builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
-//migration
+using (var scope = app.Services.CreateScope())
+{
+    var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+    db.Database.Migrate();
+}
 
 app.UseSwagger();
 app.UseSwaggerUI();
