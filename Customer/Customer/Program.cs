@@ -1,12 +1,14 @@
 using Customer;
 using Customer.Config;
 using Customer.DTO;
+using Customer.Services;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddSingleton<AppDbContextFactory, AppDbContextFactory>();
 builder.Services.AddSingleton<IDataRepo, DataRepo>();
+builder.Services.AddSingleton<IAuthService, AuthService>();
 
 builder.Services.Configure<AppSettings>(builder.Configuration);
 builder.Services.AddSingleton(resolver =>

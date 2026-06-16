@@ -6,4 +6,5 @@ namespace Customer.Config;
 public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(options)
 {
     public DbSet<CurrencyEntity> Currency { get; set; }
+    public DbSet<User> Users { get; set; }
 }
